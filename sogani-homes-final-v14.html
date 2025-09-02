@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Sogani Homes — Noida & Gurgaon • A better way to find home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    /* Brand helpers */
+    .brand-gradient { background-image: linear-gradient(135deg, #4f46e5, #10b981); } /* indigo -> emerald */
+    .brand-gradient-soft { background-image: linear-gradient(180deg, rgba(79,70,229,0.06), rgba(16,185,129,0.06)); }
+    .brand-text { background: linear-gradient(135deg, #4f46e5, #10b981); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  </style>
+  <script>
+    // Phone number constants
+    const PHONE_DISPLAY = "+91 92121 10233";
+    const PHONE_TEL = "+919212110233";
+
+    // TODO: Paste your deployed Apps Script Web App URL below
+    const ENDPOINT = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+    function scrollToForm() {
+      const el = document.getElementById("get-started");
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function sanitizePhone(value) {
+      return (value || "").replace(/[^0-9+]/g, "");
+    }
+
+    async function submitForm(e) {
+      e.preventDefault();
+      const f = e.target;
+      // Basic client-side validation for Indian numbers
+      const rawPhone = f.phone.value.trim();
+      const phone = sanitizePhone(rawPhone);
+      const phoneOk = (/^(\+?91[-\s]?)?[6-9]\d{9}$/).test(phone.replace(/\s+/g,''));
+      if (!phoneOk) {
+        alert("Please enter a valid Indian mobile number (e.g., 9560985833 or +91 9560985833).");
+        f.phone.focus();
+        return;
+      }
+      const payload = new URLSearchParams();
+      payload.append("name", f.name.value || "");
+      payload.append("contact", phone);
+      payload.append("phone", phone);
+      payload.append("email", f.email.value || "");
+      payload.append("city", f.city.value || "");
+      payload.append("budget", f.budget.value || "");
+      payload.append("locations", f.locations.value || "");
+      payload.append("timeline", f.timeline.value || "");
+      payload.append("ua", navigator.userAgent);
+
+      try {
+        if (ENDPOINT && !ENDPOINT.includes("PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE")) {
+          await fetch(ENDPOINT, { method: "POST", body: payload });
+        } else {
+          console.warn("Apps Script endpoint not set. Skipping save.");
+        }
+      } catch (err) {
+        console.error("Lead save failed:", err);
+      } finally {
+        window.location.href = "tel:" + PHONE_TEL;
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen w-full bg-gradient-to-b from-emerald-50 via-white to-indigo-50 text-zinc-900">
+  <!-- Header -->
+  <header class="border-b border-zinc-200 bg-white/80 backdrop-blur">
+    <nav class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 md:px-6">
+      <div class="flex items-center gap-3">
+        <span class="inline-flex h-8 w-8 items-center justify-center rounded-full text-white text-base font-semibold brand-gradient shadow-sm">SH</span>
+        <span class="font-semibold tracking-tight">Sogani Homes</span>
+      </div>
+      <div class="hidden gap-6 text-base md:flex">
+        <a href="#story" class="hover:text-zinc-900 text-zinc-600">Story</a>
+        <a href="#how" class="hover:text-zinc-900 text-zinc-600">How it works</a>
+        <a href="#why" class="hover:text-zinc-900 text-zinc-600">Why us</a>
+        <a href="#get-started" class="hover:text-zinc-900 text-zinc-600">Get matches</a>
+        <a href="#contact" class="hover:text-zinc-900 text-zinc-600">Contact</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="#" onclick="window.location.href='tel:'+PHONE_TEL; return false;" class="hidden md:inline text-base font-medium text-zinc-700 hover:text-zinc-900">Call: <span class="font-semibold">+91 92121 10233</span></a>
+        <button onclick="scrollToForm()" class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-base font-medium text-white brand-gradient hover:brightness-110">
+          Get my matches <span aria-hidden="true">➡️</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  
+
+<section id="hero" class="relative w-full border-b border-zinc-200 brand-gradient-soft overflow-hidden">
+  <!-- Delhi city street looping video background -->
+  <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-30">
+    <source src="https://player.vimeo.com/external/449972309.sd.mp4?s=af3ef7a8904e3ff95e9e1f08b4374c1d19ebadc1&profile_id=164&oauth2_token_id=57447761" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="relative mx-auto max-w-6xl px-4 md:px-6 py-12 md:py-20">
+    <div class="max-w-3xl">
+      <span class="inline-flex items-center gap-2 rounded-full border border-emerald-200/70 bg-white px-3 py-1 text-xs text-emerald-700 shadow-sm">📍 Noida & Gurgaon</span>
+      <h1 class="mt-6 text-3xl md:text-5xl font-semibold tracking-tight text-zinc-900">
+        Hi, We are <span class="brand-text">Sogani</span>! We help you find your perfect home — tailored to your commute, lifestyle, and budgets.
+      </h1>
+      <p class="mt-4 text-lg text-zinc-800 leading-loose">
+        Finding a home should feel exciting. Instead, it feels like a second job — axiety and stress inducing. We are trying to fix that — for you and ourselves.
+      </p>
+      <div class="mt-6 flex flex-wrap items-center gap-3">
+        <button onclick="scrollToForm()" class="inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium text-white brand-gradient hover:brightness-110">
+          Find my home <span aria-hidden="true">➡️</span>
+        </button>
+        <a href="tel:+919212110233" class="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-white px-5 py-3 text-sm font-medium text-indigo-700 hover:bg-indigo-50">
+          Call us <span aria-hidden="true">📞</span> +91 92121 10233
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- Story: The pain -->
+  
+
+<section id="story" class="w-full max-w-6xl mx-auto px-4 md:px-6 pt-12 md:pt-20">
+  <div class="mx-auto max-w-3xl text-center mb-6">
+    <h2 class="text-2xl md:text-4xl font-semibold tracking-tight brand-text">The pain was real</h2>
+    <p class="mt-3 text-lg text-zinc-600 leading-loose">
+      We are a bunch of folks from IIT Delhi, IIT Bombay, ISB Hyderabad, and IIM Bangalore who moved to Gurgaon to work for a top consulting firm (think MBB)...but house hunting was more stressful than the deadlines.
+    </p>
+  </div>
+  <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+    <div class="rounded-2xl border border-emerald-200 bg-white p-6 shadow hover:shadow-md transition">
+      <p class="text-base text-zinc-700">⏰ Weekends lost to random house visits.</p>
+    </div>
+    <div class="rounded-2xl border border-emerald-200 bg-white p-6 shadow hover:shadow-md transition">
+      <p class="text-base text-zinc-700">🛡️ Brokers kept showing houses they had, not what I actually needed.</p>
+    </div>
+    <div class="rounded-2xl border border-emerald-200 bg-white p-6 shadow hover:shadow-md transition">
+      <p class="text-base text-zinc-700">⚠️ Too many bad actors and bait listings — I had to stay constantly on guard.</p>
+    </div>
+    <div class="rounded-2xl border border-emerald-200 bg-white p-6 shadow hover:shadow-md transition">
+      <p class="text-base text-zinc-700">📍 Nobody understood my taste, commute, or lifestyle.</p>
+    </div>
+    <div class="rounded-2xl border border-emerald-200 bg-white p-6 shadow hover:shadow-md transition">
+      <p class="text-base text-zinc-700">🤹 Juggling multiple brokers with office and life.</p>
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- Solution: How it works -->
+  
+<section id="how" class="w-full max-w-6xl mx-auto px-4 md:px-6 pt-12 md:pt-20">
+  <div class="mx-auto max-w-4xl text-center">
+    <h2 class="text-2xl md:text-4xl font-semibold tracking-tight brand-text">Building a simpler and faster way to find a home</h2>
+    <p class="mt-3 text-lg text-zinc-600 leading-loose">We listen first. Then we bring you homes that feel right — on paper and in real life.</p>
+  </div>
+  <div class="relative mt-10">
+    <div class="flex flex-col md:flex-row items-center justify-between">
+      <div class="flex-1 text-center md:text-left">
+        <h3 class="text-lg font-semibold">1) Tell us your story</h3>
+        <p class="mt-2 text-zinc-600 text-base">Budget, commute, routines, non‑negotiables — the little things that make a place “yours”.</p>
+      </div>
+      <div class="hidden md:block flex-none w-32 border-t-2 border-dotted border-emerald-400 mx-4"></div>
+      <div class="flex-1 text-center md:text-left">
+        <h3 class="text-lg font-semibold">2) We curate what fits</h3>
+        <p class="mt-2 text-zinc-600 text-base">Verified options aligned to your taste and time. Fewer tabs. Fewer visits. More clarity.</p>
+      </div>
+      <div class="hidden md:block flex-none w-32 border-t-2 border-dotted border-emerald-400 mx-4"></div>
+      <div class="flex-1 text-center md:text-left">
+        <h3 class="text-lg font-semibold">3) Move in, without chaos</h3>
+        <p class="mt-2 text-zinc-600 text-base">Shortlist → viewings → paperwork → utilities — we stay with you till you walk through the door.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="why" class="w-full max-w-6xl mx-auto px-4 md:px-6 py-16 md:py-24">
+  <div class="mx-auto max-w-4xl text-center">
+    <h2 class="text-3xl md:text-4xl font-semibold tracking-tight brand-text">What makes us different</h2>
+  </div>
+  <div class="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3 items-stretch">
+    <div class="rounded-2xl border border-emerald-200 bg-white p-6 shadow hover:shadow-md transition">
+      <h3 class="text-xl font-semibold">🛡️ Verified listings only</h3>
+      <p class="mt-2 text-zinc-600 text-lg">No fake promises. We review documents and details before they reach you.</p>
+    </div>
+    <div class="rounded-2xl border border-emerald-200 bg-white p-6 shadow hover:shadow-md transition">
+      <h3 class="text-xl font-semibold">⏱️ Matches within 48 hours</h3>
+      <p class="mt-2 text-zinc-600 text-lg">Curated options hit your inbox fast — so weekends are for living, not searching.</p>
+    </div>
+    <div class="rounded-2xl border border-emerald-200 bg-white p-6 shadow hover:shadow-md transition">
+      <h3 class="text-xl font-semibold">📍 Lifestyle‑centric suggestions</h3>
+      <p class="mt-2 text-zinc-600 text-lg">Near metro, gyms, cafés, pet‑friendly — we optimize for your day‑to‑day.</p>
+    </div>
+    <div class="rounded-2xl border border-emerald-200 bg-white p-6 shadow hover:shadow-md transition">
+      <h3 class="text-xl font-semibold">📞 End‑to‑end support</h3>
+      <p class="mt-2 text-zinc-600 text-lg">From shortlisting to move‑in. Paperwork, movers, utilities — handled.</p>
+    </div>
+    <div class="rounded-2xl border border-emerald-200 bg-white p-6 shadow hover:shadow-md transition">
+      <h3 class="text-xl font-semibold">🧑‍💼 Single point of contact</h3>
+      <p class="mt-2 text-zinc-600 text-lg">We aggregate all the houses from the dealers so you only look at the best of the lot without the hassle.</p>
+    </div>
+  </div>
+</section>
+
+
+  <!-- Why we are different + coverage -->
+  <section id="why" class="w-full max-w-6xl mx-auto px-4 md:px-6 pt-12 md:pt-20">
+    <div class="grid gap-5 md:grid-cols-2 items-stretch">
+      
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lead form -->
+  <section id="get-started" class="w-full max-w-6xl mx-auto px-4 md:px-6 pt-12 md:pt-20 pb-16">
+    <div class="mx-auto max-w-3xl text-center">
+      <h2 class="text-2xl md:text-3xl font-semibold tracking-tight brand-text">Let’s find your place</h2>
+      <p class="mt-2 text-zinc-600">Share a few details or just call — we’ll take it from there.</p>
+    </div>
+    <div class="mx-auto max-w-3xl mt-6">
+      <div class="rounded-3xl border border-indigo-200 bg-white p-6 md:p-10 shadow-sm">
+        <form onsubmit="submitForm(event)" class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div class="md:col-span-1">
+            <label class="text-base font-medium text-zinc-800">Name</label>
+            <input name="name" placeholder="Your name" class="mt-1 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-base outline-none ring-indigo-600/10 focus:ring-4" required />
+          </div>
+          <div class="md:col-span-1">
+            <label class="text-base font-medium text-zinc-800">Contact number</label>
+            <input name="phone" type="tel" inputmode="numeric" placeholder="e.g., 9212110233" pattern="^(\+?91[-\s]?)?[6-9]\d{9}$" title="Enter a valid Indian mobile number" class="mt-1 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-base outline-none ring-emerald-600/10 focus:ring-4" required />
+          </div>
+          <div class="md:col-span-2">
+            <label class="text-base font-medium text-zinc-800">Email (optional)</label>
+            <input name="email" type="email" placeholder="you@example.com" class="mt-1 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-base outline-none ring-indigo-600/10 focus:ring-4" />
+          </div>
+          <div class="md:col-span-1">
+            <label class="text-base font-medium text-zinc-800">City</label>
+            <select name="city" class="mt-1 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-base outline-none ring-emerald-600/10 focus:ring-4">
+              <option>Noida</option>
+              <option>Gurgaon</option>
+            </select>
+          </div>
+          <div class="md:col-span-1">
+            <label class="text-base font-medium text-zinc-800">Budget</label>
+            <input name="budget" placeholder="e.g., ₹30k–₹45k / month" class="mt-1 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-base outline-none ring-indigo-600/10 focus:ring-4" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="text-base font-medium text-zinc-800">Preferred localities</label>
+            <input name="locations" placeholder="e.g., Sector 62, DLF Phase 2" class="mt-1 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-base outline-none ring-emerald-600/10 focus:ring-4" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="text-base font-medium text-zinc-800">Move‑in timeline</label>
+            <select name="timeline" class="mt-1 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-base outline-none ring-indigo-600/10 focus:ring-4">
+              <option>ASAP</option>
+              <option>Within 2 weeks</option>
+              <option>Within 1 month</option>
+              <option>1–3 months</option>
+            </select>
+          </div>
+          <div class="md:col-span-2 mt-2 flex flex-wrap items-center justify-center gap-3">
+            <button type="submit" class="inline-flex items-center gap-2 rounded-full px-6 py-3 text-base font-medium text-white brand-gradient hover:brightness-110">
+              Get my matches <span aria-hidden="true">➡️</span>
+            </button>
+            <a href="#" onclick="window.location.href='tel:'+PHONE_TEL; return false;" class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-5 py-3 text-base font-medium text-emerald-700 hover:bg-emerald-50">
+              Or call us now: <span class="font-semibold">+91 92121 10233</span>
+            </a>
+          </div>
+          <p class="md:col-span-2 text-xs text-zinc-500 mt-2">We’ll only use your number to contact you about your search.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Closing -->
+  <section class="w-full max-w-6xl mx-auto px-4 md:px-6 pb-16 md:pb-24 text-center">
+    <h2 class="text-2xl md:text-3xl font-semibold tracking-tight brand-text">More time for what matters</h2>
+    <p class="mt-3 text-lg text-zinc-700">Homes are about mornings that feel easy and evenings that feel calm. Let’s get you there, without the chaos.</p>
+    <div class="mt-6 text-base text-zinc-500">— Sogani</div>
+  </section>
+
+  <!-- Contact Us -->
+  <section id="contact" class="w-full border-t border-zinc-200 bg-white">
+    <div class="w-full max-w-6xl mx-auto px-4 md:px-6 py-12 md:py-16">
+      <h3 class="text-2xl font-semibold tracking-tight brand-text text-center">Contact us</h3>
+      <p class="mt-2 text-zinc-700 text-center max-w-3xl mx-auto">
+        Real Estate has long been the playground of individual brokers. Most tech firms have stuck to listings. We are building a new experience and would love to hear your thoughts or suggestions!
+        Hit us up anytime from <span class="font-medium">9 AM to 9 PM</span> — all days of the week.
+      </p>
+      <div class="mt-6 grid gap-6 md:grid-cols-2 items-stretch">
+        <div class="rounded-2xl border border-indigo-200 p-5 h-full">
+          <div class="text-base font-medium text-zinc-800">Address</div>
+          <p class="mt-1 text-zinc-700 leading-loose">
+            A-219, Tower 3, NxOne, Noida Extension,<br/>
+            Uttar Pradesh — 201301
+          </p>
+        </div>
+        <div class="rounded-2xl border border-emerald-200 p-5 h-full">
+          <div class="text-base font-medium text-zinc-800">Phone</div>
+          <p class="mt-1 text-zinc-700">
+            <a href="#" onclick="window.location.href='tel:'+PHONE_TEL; return false;" class="font-semibold hover:underline">+91 92121 10233</a>
+          </p>
+          <div class="mt-4 flex flex-wrap gap-3">
+            <a href="#" onclick="window.location.href='tel:'+PHONE_TEL; return false;" class="inline-flex items-center gap-2 rounded-full px-5 py-2 text-base font-medium text-white brand-gradient hover:brightness-110">Call now</a>
+            <a href="#get-started" class="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-white px-5 py-2 text-base font-medium text-indigo-700 hover:bg-indigo-50">Share your requirements</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-zinc-200 py-8">
+    <div class="w-full max-w-6xl mx-auto px-4 md:px-6 flex flex-col items-center justify-between gap-4 text-base text-zinc-600 md:flex-row">
+      <div>© <span id="year"></span> <span class="font-medium">Sogani Homes</span> — All rights reserved.</div>
+      
+    <div class="mt-6 text-base text-zinc-600">
+      <div class="font-medium">Local Expertise</div>
+      <ul class="list-disc ml-5 mt-2 space-y-1">
+        <li>Built in Noida — We know the streets, traffic, and commute patterns.</li>
+        <li>Built in Gurgaon — From DLF to Golf Course Road, we cover all prime locations.</li>
+      </ul>
+    </div>
+    <div class="flex items-center gap-4">
+        <a href="#contact" class="hover:text-zinc-900">Contact</a>
+        <a href="#" onclick="window.location.href='tel:'+PHONE_TEL; return false;" class="hover:text-zinc-900">Call: +91 92121 10233</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Call -->
+  <a
+    href="#"
+    onclick="window.location.href='tel:'+PHONE_TEL; return false;"
+    class="fixed bottom-5 right-5 inline-flex items-center gap-2 rounded-full px-4 py-3 text-base font-medium text-white brand-gradient shadow-lg hover:brightness-110"
+    aria-label="Call us"
+  >
+    📞 Call us
+  </a>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
